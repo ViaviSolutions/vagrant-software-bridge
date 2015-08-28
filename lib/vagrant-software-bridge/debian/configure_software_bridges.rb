@@ -12,6 +12,9 @@ module VagrantPlugins
         # Heavily borrowed from VagrantPlugins::Debian::Cap::ConfigureNetworks.
         def self.configure_software_bridges(machine, bridges)
           machine.communicate.tap do |comm|
+            # Install bridge-utils
+            comm.sudo("apt-get install -y bridge-utils")
+
             # First, remove any previous network modifications
             # from the interface file.
             comm.sudo("sed -e '/^#VAGRANT-BRIDGE-BEGIN/,/^#VAGRANT-BRIDGE-END/ d' /etc/network/interfaces > /tmp/vagrant-network-interfaces")
